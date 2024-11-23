@@ -1,16 +1,11 @@
-penpot.ui.open("Penpot plugin starter template", `?theme=${penpot.theme}`);
+penpot.ui.open("Mockup Mirror", `?theme=${penpot.theme}`);
 
-penpot.ui.onMessage<string>((message) => {
-  if (message === "create-text") {
-    const text = penpot.createText("Hello world!");
-
-    if (text) {
-      text.x = penpot.viewport.center.x;
-      text.y = penpot.viewport.center.y;
-
-      penpot.selection = [text];
-    }
-  }
+penpot.ui.onMessage<{
+  type: string;
+  data: any;
+}>((message) => {
+  console.log(message);
+  // Logic
 });
 
 // Update the theme in the iframe
