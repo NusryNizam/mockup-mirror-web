@@ -1,6 +1,6 @@
 {
-  "name": "Penpot starter plugin",
+  "name": "Mockup Mirror",
+  "description": "Mirror your mockups on a real device",
   "code": "plugin.js",
-  "description": "This is a starter plugin for Penpot",
-  "permissions": ["content:read", "content:write"]
+  "permissions": ["content:read"]
 }
