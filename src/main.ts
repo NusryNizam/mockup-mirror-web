@@ -1,7 +1,7 @@
 import "./style.css";
 import { DesignConnection } from "./DesignConnection";
 import { Board } from "@penpot/plugin-types";
-import { displayImages, displayImagesWithImgTags } from "./util";
+import { displayImagesWithImgTags } from "./util";
 
 // get the current theme from the URL
 const searchParams = new URLSearchParams(window.location.search);
@@ -12,13 +12,6 @@ const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 const qrContainer = document.getElementById(
   "qr-container"
 ) as HTMLCanvasElement;
-
-document
-  .querySelector("[data-handler='create-text']")
-  ?.addEventListener("click", () => {
-    // send message to plugin.ts
-    parent.postMessage("create-text", "*");
-  });
 
 let selectedBoards: Board[] = [];
 let boardImages: Uint8Array[] = [];
@@ -40,3 +33,11 @@ window.addEventListener("message", async (event) => {
 
 const connection = new DesignConnection(qrContainer);
 connection.createConnectionQR();
+
+document
+  .querySelector("[data-handler='send-message']")
+  ?.addEventListener("click", () => {
+    // send message to plugin.ts
+    parent.postMessage("create-text", "*");
+    connection.sendMessage();
+  });

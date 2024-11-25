@@ -7,7 +7,7 @@ export class DesignConnection {
 
   constructor(qrContainer: HTMLCanvasElement) {
     this.pc = new RTCPeerConnection();
-    this.dataChannel = this.pc.createDataChannel("designs");
+    this.dataChannel = this.pc.createDataChannel("imageData");
     this.setupDataChannel();
     this.qrContainer = qrContainer;
   }
@@ -23,6 +23,7 @@ export class DesignConnection {
     this.pc
       .createOffer()
       .then((offer) => {
+        console.log("offering...");
         return this.pc.setLocalDescription(offer);
       })
       .then(() => {
@@ -48,5 +49,16 @@ export class DesignConnection {
         });
       })
       .catch((err) => console.error("Error:", err));
+  }
+
+  getState(): string {
+    return this.dataChannel.readyState;
+  }
+
+  sendMessage() {
+    console.log(this.dataChannel.readyState);
+    if (this.dataChannel.readyState === "open") {
+      this.dataChannel.send("Hello therer my friendd");
+    }
   }
 }
