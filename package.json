@@ -10,6 +10,7 @@
   "dependencies": {
     "@penpot/plugin-styles": "1.0.0",
     "@penpot/plugin-types": "1.0.0",
+    "peerjs": "^1.5.4",
     "qrcode": "^1.5.4"
   },
   "devDependencies": {

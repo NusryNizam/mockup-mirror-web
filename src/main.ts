@@ -1,5 +1,4 @@
 import "./style.css";
-import { DesignConnection } from "./DesignConnection";
 import { Board } from "@penpot/plugin-types";
 import { displayImagesWithImgTags } from "./util";
 
@@ -31,13 +30,64 @@ window.addEventListener("message", async (event) => {
   }
 });
 
-const connection = new DesignConnection(qrContainer);
-connection.createConnectionQR();
+// const connection = new DesignConnection(qrContainer);
+// connection.createConnectionQR();
 
 document
   .querySelector("[data-handler='send-message']")
   ?.addEventListener("click", () => {
     // send message to plugin.ts
     parent.postMessage("create-text", "*");
-    connection.sendMessage();
+    // connection.sendMessage();
   });
+
+import Peer from "peerjs";
+import QRCode from "qrcode";
+const peer = new Peer();
+
+peer.on("open", (id: string) => {
+  console.log("The ID: ", id);
+
+  QRCode.toCanvas(qrContainer, btoa(id));
+});
+
+// Handle incoming connections
+peer.on("connection", (conn) => {
+  console.log("Incoming connection from:", conn.peer);
+
+  // Handle incoming data
+  conn.on("data", (data) => {
+    try {
+      // Convert received data to ArrayBuffer if it isn't already
+      const arrayBuffer = data instanceof ArrayBuffer ? data : data.buffer;
+      const decoder = new TextDecoder();
+      const decodedMessage = decoder.decode(arrayBuffer);
+      console.log("Received message:", decodedMessage);
+      
+      // When sending back
+      const encoder = new TextEncoder();
+      const response = encoder.encode("Message received!");
+      conn.send(response);
+    } catch (error) {
+      console.error("Error processing message:", error);
+    }
+  });
+
+  // Handle connection events
+  conn.on("open", () => {
+    console.log("Connection established");
+  });
+
+  conn.on("close", () => {
+    console.log("Connection closed");
+  });
+
+  conn.on("error", (error) => {
+    console.error("Connection error:", error);
+  });
+});
+
+// Handle peer errors
+peer.on("error", (error) => {
+  console.error("Peer error:", error);
+});
