@@ -6,7 +6,7 @@ body {
   font-weight: 400;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
-  padding: 10px;
+  padding-block: 10px;
   max-width: 800px;
   margin-inline: auto;
 }

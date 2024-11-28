@@ -34,7 +34,7 @@ penpot.on("selectionchange", async () => {
 async function getImages(): Promise<Uint8Array[]> {
   const promises = penpot.selection
     .filter((e) => e.type === "board")
-    .map((e) => e.export({ type: "png", scale: 1 }));
+    .map((e) => e.export({ type: "jpeg", scale: 1 }));
 
   return Promise.all(promises);
 }
