@@ -6,17 +6,34 @@
     <title>Mockup Mirror</title>
   </head>
   <body>
-    <canvas id="qr-container"></canvas>
-    <br>
-    <button type="button" data-appearance="primary" data-handler="send-message">
+    <div class="qr-wrapper">
+      <canvas id="qr-container"></canvas>
+
+      <div>
+        <div class="body-l" style="font-weight: 600">Setup your connection</div>
+        <div class="body-m">
+          Open the companion app on your Android phone and scan the QR Code to get
+          started
+        </div>
+        <div class="body-m" style="opacity: 0.5">
+          Make sure both devices are on the same Wi-Fi network
+        </div>
+        <br>
+        <div class="caption" style="opacity: 0.5">
+          Don't have the companion app?
+          <a href="#" target="_blank">Get it here</a>
+        </div>
+      </div>
+    </div>
+    <br />
+    <!-- <button type="button" data-appearance="primary" data-handler="send-message">
       Preview
-    </button>
+    </button> -->
 
-    <br>
-    <br>
-    <p class="body-m">Selected Boards</p>
-    <div id="img-container" class="img-container"></div>
-
+    <div class="content">
+      <p class="body-m">Selected Boards</p>
+      <div id="img-container" class="img-container"></div>
+    </div>
 
     <script type="module" src="/src/main.ts"></script>
   </body>

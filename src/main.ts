@@ -18,8 +18,10 @@ const imgContainer = document.getElementById("img-container") as HTMLDivElement;
 const qrContainer = document.getElementById(
   "qr-container"
 ) as HTMLCanvasElement;
+const qrWrapper = document.querySelector(".qr-wrapper") as HTMLElement;
+const content = document.querySelector(".content") as HTMLElement;
+content.style.display = "none";
 
-let selectedBoards: Board[] = [];
 let boardImages: Uint8Array[] = [];
 
 // Listen plugin.ts messages
@@ -29,17 +31,14 @@ window.addEventListener("message", async (event) => {
   }
 
   if (event.data.type === "selection") {
-    selectedBoards = event.data.data;
     boardImages = event.data.images;
 
     await displayImagesWithImgTags(boardImages, imgContainer);
-    console.log("Images: ", boardImages);
+    sendMessage(peerId, boardImages);
   }
 });
 
 peer.on("open", (id) => {
-  console.info("The ID: ", id);
-
   QRCode.toCanvas(qrContainer, btoa(id));
 });
 
@@ -72,14 +71,23 @@ peer.on("connection", (conn) => {
   // Handle connection events
   conn.on("open", () => {
     console.log("Connection established");
+    qrWrapper.style.display = "none";
+    content.style.display = "block";
+    sendMessage(peerId, boardImages);
   });
 
   conn.on("close", () => {
     console.log("Connection closed");
     delete connections[conn.peer]; // Remove closed connection
+
+    qrWrapper.style.display = "block";
+    content.style.display = "none";
   });
 
   conn.on("error", (error) => {
+    qrWrapper.style.display = "block";
+    content.style.display = "none";
+
     console.error("Connection error:", error);
   });
 });
@@ -118,15 +126,6 @@ function sendMessage(peerId: string, data: Uint8Array[]) {
     conn.send(end);
   });
 }
-
-document
-  .querySelector("[data-handler='send-message']")
-  ?.addEventListener("click", () => {
-    // send message to plugin.ts
-    parent.postMessage("create-text", "*");
-    sendMessage(peerId, boardImages);
-    console.log("cliking");
-  });
 
 function uint8ArrayToBase64(uint8Array: Uint8Array) {
   // Convert the Uint8Array to a binary string

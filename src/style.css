@@ -16,9 +16,32 @@ p {
 }
 
 .img-container {
-  max-height: 400px;
+  max-height: 240px;
+  overflow: auto;
+  display: flex;
+}
+.img-container img {
+  max-width: 180px;
 }
 
 .main-title {
   font-weight: 600;
+}
+
+#qr-container {
+  border-radius: var(--spacing-8);
+  aspect-ratio: 1;
+  max-width: 164px;
+  box-shadow: 0px 0px 4px rgb(0 0 0 / 14%);
+}
+
+.qr-wrapper {
+  margin-top: var(--spacing-8);
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing-16);
+}
+
+.qr-wrapper > div {
+  max-width: 36ch;
 }

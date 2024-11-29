@@ -58,7 +58,7 @@ export async function displayImagesWithImgTags(
 
     // Style the image for padding
     img.style.marginRight = `10px`;
-    img.style.maxHeight = `400px`;
+    img.style.maxHeight = `240px`;
 
     // Append the image to the container
     container.appendChild(img);
