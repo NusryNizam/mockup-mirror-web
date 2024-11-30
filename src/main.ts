@@ -1,5 +1,4 @@
 import "./style.css";
-import { Board } from "@penpot/plugin-types";
 import { displayImagesWithImgTags } from "./util";
 
 import Peer, { DataConnection } from "peerjs";
@@ -80,12 +79,12 @@ peer.on("connection", (conn) => {
     console.log("Connection closed");
     delete connections[conn.peer]; // Remove closed connection
 
-    qrWrapper.style.display = "block";
+    qrWrapper.style.display = "flex";
     content.style.display = "none";
   });
 
   conn.on("error", (error) => {
-    qrWrapper.style.display = "block";
+    qrWrapper.style.display = "flex";
     content.style.display = "none";
 
     console.error("Connection error:", error);
