@@ -3,7 +3,6 @@ import { displayImagesWithImgTags } from "./util";
 
 import Peer, { DataConnection } from "peerjs";
 import QRCode from "qrcode";
-import { DataChunker } from "./DataChunker";
 
 const peer = new Peer();
 const connections = <Record<string, DataConnection>>{}; // To store active connections by peer ID
@@ -18,10 +17,15 @@ const qrContainer = document.getElementById(
   "qr-container"
 ) as HTMLCanvasElement;
 const qrWrapper = document.querySelector(".qr-wrapper") as HTMLElement;
+const loader = document.querySelector(".loader") as HTMLElement;
+const emptyElement = document.querySelector(".empty-state") as HTMLElement;
+
 const content = document.querySelector(".content") as HTMLElement;
 content.style.display = "none";
 
 let boardImages: Uint8Array[] = [];
+
+isEmpty();
 
 // Listen plugin.ts messages
 window.addEventListener("message", async (event) => {
@@ -29,19 +33,24 @@ window.addEventListener("message", async (event) => {
     document.body.dataset.theme = event.data.theme;
   }
 
-  if (event.data.type === "selection") {
-    boardImages = event.data.images;
+  if (event.data.type === "selecting") {
+    imgContainer.innerHTML = "";
+    loader.style.display = "block";
+    emptyElement.innerText = "";
+  }
 
-    await displayImagesWithImgTags(boardImages, imgContainer);
+  if (event.data.type === "selection") {
+    loader.style.display = "none";
+    boardImages = event.data.images;
+    isEmpty();
     sendMessage(peerId, boardImages);
+    displayImagesWithImgTags(boardImages, imgContainer);
   }
 });
 
 peer.on("open", (id) => {
   QRCode.toCanvas(qrContainer, btoa(id));
 });
-
-let chunker: DataChunker | null = null;
 
 // Handle incoming connections
 peer.on("connection", (conn) => {
@@ -50,7 +59,6 @@ peer.on("connection", (conn) => {
 
   // Store connection
   connections[conn.peer] = conn;
-  chunker = new DataChunker(conn);
 
   // Handle incoming data
   conn.on("data", (data: any) => {
@@ -106,6 +114,10 @@ function sendMessage(peerId: string, data: Uint8Array[]) {
     return;
   }
 
+  const encoder = new TextEncoder();
+  const startOver = encoder.encode("START OVER");
+  conn.send(startOver);
+
   data.forEach((image) => {
     const base64 = uint8ArrayToBase64(image);
     console.log("LENGTH: ", base64.length);
@@ -145,4 +157,12 @@ function divideStringIntoChunks(input: string, chunkSize: number): string[] {
     chunks.push(input.slice(i, i + chunkSize));
   }
   return chunks;
+}
+
+function isEmpty() {
+  if (boardImages.length === 0) {
+    emptyElement.innerText = "Select one or more boards to preview";
+  } else {
+    emptyElement.innerText = "";
+  }
 }

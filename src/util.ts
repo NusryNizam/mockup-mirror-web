@@ -17,7 +17,6 @@ export async function displayImages(
   let currentX = 0;
 
   for (const imageData of imageDataArray) {
-    // Convert Uint8Array to SVG string
 
     // Create a Blob from the SVG string
     const blob = new Blob([imageData], { type: "image/png" });

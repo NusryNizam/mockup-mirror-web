@@ -1,13 +1,6 @@
 penpot.ui.open("Mockup Mirror", `?theme=${penpot.theme}`, {
   width: 800,
-  height: 600,
-});
-
-penpot.ui.onMessage<{
-  type: string;
-  data: any;
-}>((message) => {
-  // Logic
+  height: 400,
 });
 
 // Update the theme in the iframe
@@ -23,6 +16,12 @@ let images: Uint8Array[] = [];
 
 // send the selected boards on change
 penpot.on("selectionchange", async () => {
+  penpot.ui.sendMessage({
+    type: "selecting",
+    data: [],
+    images: [],
+  });
+
   images = await getImages();
   penpot.ui.sendMessage({
     type: "selection",
