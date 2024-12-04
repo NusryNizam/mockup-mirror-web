@@ -1,6 +1,7 @@
 {
   "name": "Mockup Mirror",
   "description": "Mirror your mockups on a real device",
+  "icon": "/icon.png",
   "code": "plugin.js",
   "permissions": ["content:read"]
 }
