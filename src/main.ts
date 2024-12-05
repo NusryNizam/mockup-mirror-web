@@ -115,8 +115,8 @@ function sendMessage(peerId: string, data: Uint8Array[]) {
   }
 
   const encoder = new TextEncoder();
-  const startOver = encoder.encode("START OVER");
-  conn.send(startOver);
+  const streamStart = encoder.encode("STREAM START");
+  conn.send(streamStart);
 
   data.forEach((image) => {
     const base64 = uint8ArrayToBase64(image);
@@ -136,6 +136,9 @@ function sendMessage(peerId: string, data: Uint8Array[]) {
     const end = encoder.encode("END");
     conn.send(end);
   });
+
+  const streamEnd = encoder.encode("STREAM END");
+  conn.send(streamEnd);
 }
 
 function uint8ArrayToBase64(uint8Array: Uint8Array) {
